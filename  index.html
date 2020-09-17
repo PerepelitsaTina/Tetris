@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tetris</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="game-over">Game Over!</div>
+  <div class="boards">
+    <canvas id="field" width="300" height="600"></canvas>
+    <div class="info">
+      <div class="record">Record: <span class="record-value">0</span></div>
+      <div class="score">Score: <span class="score-value">0</span></div>
+      <form action="" class="speed-choice">
+        <p class="speed-choice__message">Game speed:</p>
+        <input type="radio" name="speed" value="low-speed" checked> <span class="speed-value">Low</span>
+        <input type="radio" name="speed" value="high-speed"><span class="speed-value">High</span>
+      </form>
+      <!-- <a href="#" class="start">Start</a> -->
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
