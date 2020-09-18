@@ -31,6 +31,7 @@ for (let row = -2; row < 20; row++) {
   }
 }
 
+
 const figures = {
   'I': [
     [0, 0, 0, 0],
@@ -69,15 +70,15 @@ const figures = {
   ]
 };
 
-const colors = [
-  '#d91e1e',
-  '#3a40e0',
-  '#3ae0e0',
-  '#f2eb0c',
-  '#f578da',
-  '#03a100',
-  '#f56905'
-];
+const colors = {
+  'I': '#d91e1e',
+  'L': '#3a40e0',
+  'J': '#3ae0e0',
+  'S': '#f2eb0c',
+  'Z': '#f578da',
+  'T': '#03a100',
+  'O': '#f56905'
+};
 
 let count = 0;
 let figure = getNextFigure();
@@ -116,7 +117,6 @@ function getNextFigure() {
     matrix: matrix,
     row: row,
     col: col,
-    color: colors[getRandomInt(0, colors.length - 1)]
   };
 }
 
@@ -144,23 +144,35 @@ function canMove(matrix, cellRow, cellCol) {
   return true;
 }
 
+let speed = 50;
+
+// function speedUp(n) {
+//   if (!score % 10 === 0 || speed <= 5) {
+//     return;
+//   }
+//   console.log('speed');
+//   speed -= 5;
+// }
+
 let score = 0;
 const scoreValue = document.querySelector('.score-value');
 
 function scoreUp() {
   score += 10;
   scoreValue.innerHTML = score;
+  checkRecord();
 }
 
-let record = 0;
 const recordValue = document.querySelector('.record-value');
+let record = +localStorage.getItem('record') || 0;
+recordValue.innerHTML = record;
 
 function checkRecord() {
   if (record >= score) {
     return;
   }
-  record = score;
-  recordValue.innerHTML = record;
+  localStorage.record = score;
+  recordValue.innerHTML = score;
 }
 
 function placeFigure() {
@@ -192,34 +204,56 @@ function placeFigure() {
   figure = getNextFigure();
 }
 
-let speed = 50;
+const restart = document.querySelector('.restart'),
+      pause = document.querySelector('.pause'),
+      play = document.querySelector('.play');
 
-function chooseSpeed() {
-  let speedRadios = document.getElementsByName('speed');
-  if (speedRadios[0].checked) {
-    speed = 50;
-  }
-  if (speedRadios[1].checked) {
-    speed = 25;
-  }
-}
+restart.addEventListener('click', function() {
+  window.location.reload();
+});
 
-function speedUp() {
-  if (!score % 10 === 0 || speed <= 5) {
-    return;
-  }
-  speed -= 5;
-}
+pause.addEventListener('click', function() {
+  cancelAnimationFrame(rAF);
+});
 
-const start = document.querySelector('.start');
+play.addEventListener('click', function() {
+  requestAnimationFrame(loop);
+})
 
 function showGameOver() {
   cancelAnimationFrame(rAF);
   gameOver = true;
-  checkRecord();
   let gameOverMessage = document.querySelector('.game-over');
   gameOverMessage.style.opacity = '1';
 }
+
+// function reset() {
+//   playfield = playfield.map(row => {
+//     return row.map(item => 0);
+//   });
+//   score = 0;
+// }
+
+let buttons = document.querySelector('.buttons'),
+  modal = document.querySelector('.modal'),
+  overlay = document.querySelector('.overlay');
+
+  buttons.addEventListener('click', function (event) {
+    if (event.target === buttons.children[0]) {
+      speed = 50;
+    }
+    else {
+      speed = 25;
+    }
+    modal.style.display = 'none';
+    overlay.style.display = 'none';
+    game();
+  });
+
+  function game() {
+    rAF = requestAnimationFrame(loop);
+  }
+
 
 function loop() {
   rAF = requestAnimationFrame(loop);
@@ -230,13 +264,12 @@ function loop() {
     for (let col = 0; col < 10; col++) {
       if (playfield[row][col]) {
         const name = playfield[row][col];
-        context.fillStyle = figure.color;
+        context.fillStyle = colors[name];
 
         context.fillRect(col * grid, row * grid, grid - 1, grid - 1);
       }
     }
   }
-  chooseSpeed();
 
   if (figure) {
     if (++count > speed) {
@@ -246,11 +279,10 @@ function loop() {
       if (!canMove(figure.matrix, figure.row, figure.col)) {
         figure.row--;
         placeFigure();
-        speedUp();
       }
     }
 
-    context.fillStyle = colors[getRandomInt(0, colors.length - 1)];
+    context.fillStyle = colors[figure.name];
 
     for (let row = 0; row < figure.matrix.length; row++) {
       for (let col = 0; col < figure.matrix[row].length; col++) {
@@ -294,7 +326,7 @@ window.addEventListener('keydown', function (event) {
   }
 
 });
+// rAF = requestAnimationFrame(loop);
 
 
-rAF = requestAnimationFrame(loop);
 

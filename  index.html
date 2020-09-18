@@ -15,14 +15,19 @@
     <div class="info">
       <div class="record">Record: <span class="record-value">0</span></div>
       <div class="score">Score: <span class="score-value">0</span></div>
-      <form action="" class="speed-choice">
-        <p class="speed-choice__message">Game speed:</p>
-        <input type="radio" name="speed" value="low-speed" checked> <span class="speed-value">Low</span>
-        <input type="radio" name="speed" value="high-speed"><span class="speed-value">High</span>
-      </form>
-      <!-- <a href="#" class="start">Start</a> -->
+      <a href="#" class="restart info-button">Restart</a>
+      <a href="#" class="pause info-button">Pause</a>
+      <a href="#" class="play info-button">Play</a>
     </div>
   </div>
+   <div class="modal">
+    <p class="modal__title">Choose game speed:</p>
+    <div class="buttons">
+      <a class="speed-value">Low</a>
+      <a class="speed-value">High</a>
+    </div>
+  </div>
+  <div class="overlay"></div>
   <script src="script.js"></script>
 </body>
 
