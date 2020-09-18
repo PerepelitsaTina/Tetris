@@ -144,15 +144,15 @@ function canMove(matrix, cellRow, cellCol) {
   return true;
 }
 
-let speed = 50;
+let speed;
 
-// function speedUp(n) {
-//   if (!score % 10 === 0 || speed <= 5) {
-//     return;
-//   }
-//   console.log('speed');
-//   speed -= 5;
-// }
+function speedUp(score) {
+  if (!score % 10 === 0 || speed <= 5) {
+    return;
+  }
+  console.log('speed');
+  speed = speed - 5;
+}
 
 let score = 0;
 const scoreValue = document.querySelector('.score-value');
@@ -196,6 +196,7 @@ function placeFigure() {
         }
       }
       scoreUp();
+      speedUp();
     }
     else {
       row--;
