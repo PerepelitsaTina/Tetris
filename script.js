@@ -8,18 +8,17 @@ const scoreValue = document.querySelector('.score-value');
 
 let speed;
 
-let buttons = document.querySelector('.buttons'),
-    modal = document.querySelector('.modal'),
-    overlay = document.querySelector('.overlay');
+const buttons = document.querySelector('.buttons');
+const modal = document.querySelector('.modal');
+const overlay = document.querySelector('.overlay');
 
 const recordValue = document.querySelector('.record-value');
 let record = +localStorage.getItem('record') || 0;
 recordValue.innerHTML = record;
 
-
-const restart = document.querySelector('.restart'),
-      pause = document.querySelector('.pause'),
-      play = document.querySelector('.play');
+const restart = document.querySelector('.restart');
+const pause = document.querySelector('.pause');
+const play = document.querySelector('.play');
 
 const figures = {
   'I': [
@@ -122,7 +121,7 @@ function getNextFigure() {
   }
   const name = figureSequence.pop();
   const matrix = figures[name];
-  const color = colorsArray[getRandomInt(0, colorsArray .length - 1)];  
+  const color = colorsArray[getRandomInt(0, colorsArray.length - 1)];
   const col = playfield[0].length / 2 - Math.ceil(matrix[0].length / 2);
   const row = name === 'I' ? -1 : -2;
 
@@ -135,7 +134,7 @@ function getNextFigure() {
   }
 };
 
-function rotate(matrix) {  
+function rotate(matrix) {
   const N = matrix.length - 1;
   const result = matrix.map((row, i) =>
     row.map((val, j) => matrix[N - j][i])
@@ -228,18 +227,17 @@ function loop() {
       }
     }
   }
-  
+
   if (figure) {
     if (++count > speed) {
       figure.row++;
       count = 0;
-
       if (!canMove(figure.matrix, figure.row, figure.col)) {
         figure.row--;
         placeFigure();
       }
-    } 
-    context.fillStyle = figure.color;   
+    }
+    context.fillStyle = figure.color;
 
     for (let row = 0; row < figure.matrix.length; row++) {
       for (let col = 0; col < figure.matrix[row].length; col++) {
@@ -251,15 +249,15 @@ function loop() {
   }
 };
 
-restart.addEventListener('click', function() {
+restart.addEventListener('click', function () {
   window.location.reload();
 });
 
-pause.addEventListener('click', function() {
+pause.addEventListener('click', function () {
   cancelAnimationFrame(rAF);
 });
 
-play.addEventListener('click', function() {
+play.addEventListener('click', function () {
   requestAnimationFrame(loop);
 });
 
@@ -280,13 +278,14 @@ function game() {
 };
 
 window.addEventListener('keydown', function (event) {
-  if (gameOver) return;
+  if (gameOver) {
+    return;
+  }
 
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
     const col = event.key === 'ArrowLeft'
       ? figure.col - 1
       : figure.col + 1;
-
     if (canMove(figure.matrix, figure.row, col)) {
       figure.col = col;
     }
@@ -298,15 +297,14 @@ window.addEventListener('keydown', function (event) {
       figure.matrix = matrix;
     } else {
       const { name, col } = figure;
-
       if (col < 0) {
-        name === 'I' ? figure.col += 2 : figure.col  += 1;
+        name === 'I' ? figure.col += 2 : figure.col += 1;
         figure.matrix = matrix;
       } else {
-        name === 'I' ? figure.col -= 2 : figure.col  -= 1;
+        name === 'I' ? figure.col -= 2 : figure.col -= 1;
         figure.matrix = matrix;
       }
-    } 
+    }
   };
 
   if (event.key === 'ArrowDown') {
@@ -319,5 +317,3 @@ window.addEventListener('keydown', function (event) {
     figure.row = row;
   }
 });
-
-
